@@ -1,5 +1,4 @@
-import time
-import os
+from time import sleep
 from datetime import datetime, timedelta
 
 
@@ -43,7 +42,9 @@ class Event(object):
                 (t.weekday()  in self.dow))
 
     def check(self, t):
+        print "check!"
         if self.matchtime(t):
+            print "yes!"
             self.action(*self.args, **self.kwargs)
 
 
@@ -57,18 +58,24 @@ class CronTab(object):
             for e in self.events:
                 e.check(t)
 
+            print t
             t += timedelta(minutes=1)
+            print t
+            print datetime.now()
+
+            if datetime.now() < t:
+                print "hi"
+                print (t - datetime.now()).seconds
             while datetime.now() < t:
-                time.sleep((t - datetime.now()).seconds)
+                sleep((t - datetime.now()).seconds)
 
 
 def test_task():
     """Just an example """
-    os.system('echo "hello world"')
+    print "Hello world!"
 
 c = CronTab(
-        Event(test_task, 1),
-        Event(test_task, 0, range(9, 18, 2), dow=range(0, 5))
+        Event(test_task, 20),
         )
 
 c.run()
