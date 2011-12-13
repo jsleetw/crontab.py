@@ -1,6 +1,6 @@
 from time import sleep
 from datetime import datetime, timedelta
-
+import gevent
 
 # Some utility classes / functions first
 class AllMatch(set):
@@ -62,10 +62,7 @@ class CronTab(object):
             t += timedelta(minutes=1)
             print t
             print datetime.now()
-
-            if datetime.now() < t:
-                print "hi"
-                print (t - datetime.now()).seconds
+            print (t - datetime.now()).seconds
             while datetime.now() < t:
                 sleep((t - datetime.now()).seconds)
 
@@ -75,7 +72,7 @@ def test_task():
     print "Hello world!"
 
 c = CronTab(
-        Event(test_task, 20),
+        Event(test_task, 10),
         )
 
 c.run()
